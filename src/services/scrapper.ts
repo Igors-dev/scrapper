@@ -30,8 +30,6 @@ export async function initScrapperTelegramBot(req: Request, res: Response) {
         const activeLink = Object.keys(CONVERSATIONS[id]).find(e => CONVERSATIONS[id][e]?.inProgress)
         if (text === '/start') {
             console.log('start')
-            // await TGSendVideo(id, './public/howto.mp4')
-
         } else if (text.startsWith('/add')) {
             await parseLink({ id, text, username })
         } else if (text === '/skip') {
