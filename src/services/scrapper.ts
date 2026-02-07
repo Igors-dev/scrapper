@@ -6,6 +6,7 @@ import { TGSendMessage, TGSendVideo } from "../middleware/scrapper/tg"
 import { ScrapperAdModel, ScrapperAdSchema, ScrapperUserSchema } from "../models"
 import { SEARCH_DELAY, SSConfig } from "../config/scrapper"
 import { Types } from "mongoose"
+import axios from "axios"
 type ResponseMessage = {
     from: {
         is_bot: boolean,
@@ -46,6 +47,8 @@ export async function initScrapperTelegramBot(req: Request, res: Response) {
             await modifyAd({ id, text, action: 'edit' })
         } else if (text === '/cancel') {
             await cancelAd({ id, activeLink })
+        } else if (text === '/birza') {
+            await getElectricPrice({ id })
         } else {
             await defaultTgBotCommand({ id, text, activeLink })
         }
@@ -53,6 +56,17 @@ export async function initScrapperTelegramBot(req: Request, res: Response) {
         console.log('error initScrapperTelegramBot', error);
     } finally {
         res.status(200).send('OK')
+    }
+}
+async function getElectricPrice({ id }) {
+    try {
+        const { data } = await axios.get('https://nordpool.degra.lv/api/now'),
+            { value } = data
+        await TGSendMessage(id, `Biržas cena: ${value}€`)
+
+    } catch (error) {
+        console.log('getElectricPrice error', error.message);
+
     }
 }
 async function cancelAd({ id, activeLink }) {

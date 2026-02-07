@@ -10,8 +10,8 @@ const webhookURL = `${API_URL}/scrapper/webhook/${TG_TOKEN}`
 
 export default async function setScrapperWebhook() {
     try {
-        const isOk = await getScrapperWebhook()
-        if (isOk) return console.log('Webhoook is already exist')
+        // const isOk = await getScrapperWebhook()
+        // if (isOk) return console.log('Webhoook is already exist')
         const { data } = await instance.post('/setWebhook', { url: webhookURL })
         console.log(data);
         return data
